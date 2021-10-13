@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
 
     private inner class FetchQuestions : AsyncTask<Void, Void, MutableList<Question>>() {
         val parser = XmlParser()
-        override fun doInBackground(vararg p0: Void?): MutableList<Question> {
+        override fun doInBackground(vararg params: Void?): MutableList<Question> {
             val url = URL("https://stackoverflow.com/feeds")
             val urlConnection = url.openConnection() as HttpURLConnection
             questionsList = urlConnection.inputStream?.let {

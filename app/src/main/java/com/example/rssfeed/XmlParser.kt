@@ -30,8 +30,8 @@ class XmlParser {
             if(parser.name == "entry"){
                 parser.require(XmlPullParser.START_TAG, ns, "entry")
                 var title: String? = null
-                var link: String? = null
-                var author: String? = null
+                var link: String? = ""
+                var author: String? = ""
                 while (parser.next() != XmlPullParser.END_TAG){
                     if(parser.eventType != XmlPullParser.START_TAG){
                         continue
@@ -39,7 +39,7 @@ class XmlParser {
                     when(parser.name){
                         "title" -> title = readTitle(parser)
                         "author" -> author = readAuthor(parser)
-                        "link" -> link = readLink(parser)
+//                        "link" -> link = readLink(parser)
                         else -> skip(parser)
                     }
                 }
@@ -72,10 +72,18 @@ class XmlParser {
     }
 
     private fun readAuthor(parser: XmlPullParser): String? {
+        var name : String? = ""
         parser.require(XmlPullParser.START_TAG, ns, "author")
-        val title = readText(parser)
-        parser.require(XmlPullParser.END_TAG, ns, "author")
-        return title
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.eventType != XmlPullParser.START_TAG) {
+                continue
+            }
+            when (parser.name){
+                "name" -> {name = readText(parser)}
+                else -> skip(parser)
+            }
+        }
+        return name
     }
 
     private fun readLink(parser: XmlPullParser): String? {
